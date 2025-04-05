@@ -22,17 +22,27 @@ del /q *.spec
 echo 🛠️ Building EXE files...
 
 :: Build menu.py
-pyinstaller --onefile --noconsole --additional-hooks-dir=pyi-hooks menu.py
+pyinstaller --onefile --noconsole ^
+  --add-data "assets;assets" ^
+  --add-data "lvls;lvls" ^
+  --add-data "scripts;scripts" ^
+  --additional-hooks-dir=pyi-hooks menu.py
+
 
 :: Build editor_menu.py
-pyinstaller --onefile --noconsole --additional-hooks-dir=pyi-hooks editor_menu.py
+pyinstaller --onefile --noconsole ^
+  --add-data "assets;assets" ^
+  --add-data "lvls;lvls" ^
+  --add-data "scripts;scripts" ^
+  --additional-hooks-dir=pyi-hooks editor_menu.py
+
 
 
 
 :: Skopírujeme assets, lvls, scripts do dist/
 echo 📁 Copying folders...
-xcopy assets dist\assets\ /E /I /Y
 xcopy lvls dist\lvls\ /E /I /Y
+xcopy assets dist\assets\ /E /I /Y
 xcopy scripts dist\scripts\ /E /I /Y
 
 :: Skopírujeme aj herné režimy do dist/

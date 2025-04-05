@@ -3,6 +3,8 @@ import json
 import pymunk
 from scripts.entities import *
 from lvls.sokoban.skoban_lvl import maps
+from scripts.utils import resource_path
+
 
 # ─────────────── SOKOBAN MAP LOADER ─────────────── #
 class SokobanMapLoader:
@@ -113,7 +115,7 @@ class PlatformerMapLoader(BaseMapLoader):
 
     # Načítanie mapy a inicializácia dverí a tlačidiel
     def load(self, path):
-        with open('lvls/' + path, 'r') as f:
+        with open(resource_path('lvls/' + path), 'r') as f:
             map_data = json.load(f)
         self.load_common(map_data)
 
@@ -128,7 +130,7 @@ class PlatformerMapLoader(BaseMapLoader):
 
     # Uloženie mapy do JSON súboru
     def save(self, path):
-        with open(path, 'w') as f:
+        with open(resource_path(path), 'w') as f:
             json.dump(self.save_common(), f)
 
     # Vykreslenie mapy vrátane objektov
@@ -175,7 +177,7 @@ class PrototypeMapLoader(PlatformerMapLoader):
 
     # Načítanie dát z JSON vrátane physics_objects
     def load(self, path):
-        with open('lvls/' + path, 'r') as f:
+        with open(resource_path('lvls/' + path), 'r') as f:
             map_data = json.load(f)
         self.physics_objects = map_data.get('physics_objects', [])
         self.load_common(map_data)
@@ -186,7 +188,7 @@ class PrototypeMapLoader(PlatformerMapLoader):
             if key not in self.objects:
                 self.objects[key] = [] if key in ["buttons", "doors", "finish"] else {}
 
-        with open(path, 'w') as f:
+        with open(resource_path(path), 'w') as f:
             json.dump({
                 **self.save_common(),
                 'physics_objects': [tile for tile in self.tilemap.values() if tile['type'] in PHYSICS_OBJECTS]

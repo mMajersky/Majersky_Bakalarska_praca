@@ -5,6 +5,7 @@ from prototype import Prototype_Game
 from platformer import Platformer_Game
 from lvls.sokoban.skoban_lvl import maps
 from scripts.level_state import load_level_state, is_level_unlocked, reset_progress
+from scripts.utils import resource_path, get_levels
 
 # Inicializácia Pygame
 pygame.init()
@@ -18,14 +19,6 @@ WHITE = (255, 255, 255)
 HIGHLIGHT = (255, 200, 0)
 LOCKED_COLOR = (100, 100, 100)
 BG_COLOR = (30, 30, 30)
-
-# Načítanie úrovní
-def get_levels():
-    return {
-        "Sokoban": [attr for attr in dir(maps()) if attr.startswith("lvl")],
-        "Platformer": sorted([f for f in os.listdir("lvls/platformer") if f.endswith(".json")]),
-        "Prototype": sorted([f for f in os.listdir("lvls/prototype") if f.endswith(".json")])
-    }
 
 # Trieda pre tlačidlo
 class Button:
@@ -55,11 +48,12 @@ class Button:
 current_state = "mode"
 buttons = []
 selected_mode = None
-level_dict = get_levels()
+level_dict = {}  
 
 # Tlačidlá módov
 def build_mode_buttons():
-    global buttons
+    global buttons, level_dict
+    level_dict = get_levels()
     buttons = []
     for i, mode in enumerate(level_dict):
         btn_rect = (100 + i * 220, 200, 200, 100)

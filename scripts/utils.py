@@ -6,23 +6,30 @@ from scripts.ui import LevelCompleteMessage
 base_img_path = "assets/imgs/"
 
 def resource_path(relative_path):
-    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    try:
+        base_path = sys._MEIPASS  # PyInstaller používa tento dočasný priečinok
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
     return os.path.join(base_path, relative_path)
 # Funkcia pre načítanie jedného obrázka s voliteľným zväčšením
-def load_image(path, scale=1):
-    img = pygame.image.load(base_img_path + path).convert()
-    img.set_colorkey((0, 0, 0))  # Nastavenie priehľadnej farby (čierna)
+def load_image(path, scale=1, colorkey=(0, 0, 0)):
+    img = pygame.image.load(resource_path("assets/imgs/" + path)).convert()
+    img.set_colorkey(colorkey)
     width, height = img.get_size()
-    img = pygame.transform.scale(img, (width * scale, height * scale))
-    return pygame.image.load(resource_path("assets/imgs/" + path)).convert_alpha()
+    img = pygame.transform.scale(img, (int(width * scale), int(height * scale)))
+    return img
 
 
 # Funkcia pre načítanie všetkých obrázkov z daného priečinka ako zoznam
-def load_images(path):
+def load_images(folder):
     images = []
-    for img_name in os.listdir(base_img_path + path):
-        images.append(load_image(path + '/' + img_name))
+    full_path = "assets/imgs/" + folder
+    resolved_path = resource_path(full_path)
+    for img_name in sorted(os.listdir(resolved_path)):
+        images.append(load_image(folder + "/" + img_name))
     return images
+
 
 # v budúcnosti sa sem pridajú skripty na animácie
 
@@ -44,3 +51,19 @@ def fade_transition(screen, clock, duration=2500, steps=30, color=(0, 0, 0), sho
         pygame.display.update()
         clock.tick(60)
         pygame.time.delay(delay)
+
+
+def get_levels():
+    from lvls.sokoban.skoban_lvl import maps  # importuj lokálne, aby sa zabránil cyklus
+    def safe_listdir(folder):
+        try:
+            return sorted([f for f in os.listdir(resource_path(folder)) if f.endswith(".json")])
+        except FileNotFoundError:
+            print(f"⚠️ Warning: Folder {folder} not found.")
+            return []
+
+    return {
+        "Sokoban": [attr for attr in dir(maps()) if attr.startswith("lvl")],
+        "Platformer": safe_listdir("lvls/platformer"),
+        "Prototype": safe_listdir("lvls/prototype")
+    }

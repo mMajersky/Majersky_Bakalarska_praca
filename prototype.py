@@ -119,11 +119,11 @@ class Prototype_Game:
 
 
     # Reštart aktuálneho levelu
-def restart_level(self):
-    print("Restarting level...")
-    new_game = Prototype_Game(level_index=self.level_index)
-    new_game.run()
-    self.running = False
+    def restart_level(self):
+        print("Restarting level...")
+        new_game = Prototype_Game(level_index=self.level_index)
+        new_game.run()
+        self.running = False
     # Hlavný herný cyklus
     def run(self):
         while self.running:

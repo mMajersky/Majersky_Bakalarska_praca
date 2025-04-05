@@ -2,7 +2,7 @@ import pygame
 import sys, os
 from scripts.mapLoader import PlatformerMapLoader, PrototypeMapLoader
 from scripts.ui import HUD_Editor
-from scripts.utils import load_image, load_images
+from scripts.utils import load_image, load_images, resource_path
 
 render_scale = 2
 
@@ -60,7 +60,7 @@ class Editor:
 
     # Uloženie mapy do súboru
     def savemap(self):
-        path = f"lvls/{self.mode.lower()}/{self.level_path}"
+        path = resource_path(f"lvls/{self.mode.lower()}/{self.level_path}")
         self.tilemap.save(path)
         print(f"💾 Saved map to {path}")
     
@@ -227,6 +227,7 @@ class Editor:
                     elif self.mode == "Platformer":
                         from platformer import Platformer_Game
                         Platformer_Game(level_index=self.get_level_index()).run()
+                    sys.exit()
 
 
             if event.type == pygame.KEYUP:
