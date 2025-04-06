@@ -9,7 +9,7 @@ from scripts.utils import resource_path, get_levels
 
 # Inicializácia Pygame
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((1200, 800))
 pygame.display.set_caption("Main Menu")
 font = pygame.font.Font(None, 36)
 clock = pygame.time.Clock()
@@ -55,11 +55,16 @@ def build_mode_buttons():
     global buttons, level_dict
     level_dict = get_levels()
     buttons = []
+
+    start_x = 150
+    spacing = 300
+
     for i, mode in enumerate(level_dict):
-        btn_rect = (100 + i * 220, 200, 200, 100)
+        btn_rect = (start_x + i * spacing, 250, 240, 120)
         buttons.append(Button(btn_rect, mode, lambda m=mode: select_mode(m)))
+
     # Tlačidlo v pravom dolnom rohu
-    buttons.append(Button((650, 520, 130, 40), "Reset Progress", reset_and_reload, font_size=22))
+    buttons.append(Button((1020, 720, 160, 40), "Reset Progress", reset_and_reload, font_size=22))
 
 
 # Po kliknutí na mód
@@ -77,22 +82,21 @@ def build_level_buttons(mode):
     state = load_level_state()
 
     for i, lvl in enumerate(lvl_list):
-        x = 100 + (i % 5) * 130
-        y = 150 + (i // 5) * 100
+        x = 100 + (i % 6) * 170
+        y = 200 + (i // 6) * 110
         level_label = f"Level {i+1}"
 
         unlocked = is_level_unlocked(mode, level_label, i)
-        label = level_label
-
 
         if unlocked:
             callback = lambda l=lvl, n=i+1: start_game(mode, l, n)
         else:
             callback = lambda: None
 
-        buttons.append(Button((x, y, 100, 80), label, callback, locked=not unlocked))
+        buttons.append(Button((x, y, 150, 90), level_label, callback, locked=not unlocked))
 
     buttons.append(Button((20, 20, 100, 40), "Back", go_back))
+
 
 # Späť na výber módu
 def go_back():
@@ -111,7 +115,8 @@ def start_game(mode, level_id, level_num):
 
     # Po návrate z hry znova obnovíme menu
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((1200, 800))
+    pygame.display.set_caption("Main Menu")
     build_mode_buttons() if current_state == "mode" else build_level_buttons(mode)
 
 

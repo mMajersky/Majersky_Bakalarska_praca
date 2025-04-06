@@ -12,7 +12,7 @@ class Sokoban_Game:
         # Inicializácia hry (nastavenie okna, assetov, načítanie mapy, hráči, HUD)
         pygame.init()
         pygame.display.set_caption("Sokoban")
-        self.screen = pygame.display.set_mode((640, 480))
+        self.screen = pygame.display.set_mode((1200, 800))
         self.clock = pygame.time.Clock()
         self.mode = 'Sokoban'
         self.level_index = level_index
@@ -24,6 +24,8 @@ class Sokoban_Game:
         self.level_id = self.levels[level_index]
         self.level_label = f"Level {level_index + 1}"
         self.running = True
+
+
 
 
         # Načítanie assetov (obrázky pre hráča, box a stenu)
@@ -46,6 +48,12 @@ class Sokoban_Game:
         self.level = self.map_loader.get_map()
         self.target_cords = self.map_loader.get_target()
 
+        self.tile_size = 25
+        map_width = len(self.level[0]) * self.tile_size
+        map_height = len(self.level) * self.tile_size
+        self.offset_x = (1200 - map_width) // 2
+        self.offset_y = (800 - map_height) // 2
+
         # Inicializácia HUD a hráčov
         self.hud = HUD(self, self.level_label)
         self.player1, self.player2 = self.find_players()
@@ -63,19 +71,19 @@ class Sokoban_Game:
 
     # Vykreslenie mapy (dlaždice, boxy, cieľové miesta)
     def draw_map(self):
-        tile_size = 25
         for row_idx, row in enumerate(self.level):
             for col_idx, tile in enumerate(row):
-                pos = (100 + col_idx * tile_size, 100 + row_idx * tile_size)
+                pos = (self.offset_x + col_idx * self.tile_size,self.offset_y + row_idx * self.tile_size)
+
 
                 if tile == "#":
                     self.screen.blit(self.assets["wall"], pos)
                 elif tile == "B":
                     self.screen.blit(self.assets["box"], pos)
                 elif tile == ".":
-                    pygame.draw.rect(self.screen, self.colors["target"], (*pos, tile_size, tile_size))
+                    pygame.draw.rect(self.screen, self.colors["target"], (*pos, self.tile_size, self.tile_size))
                 else:
-                    pygame.draw.rect(self.screen, self.colors["floor"], (*pos, tile_size, tile_size))
+                    pygame.draw.rect(self.screen, self.colors["floor"], (*pos, self.tile_size, self.tile_size))
 
     # Kontrola výhry – všetky cieľové miesta musia byť pokryté boxom
     def check_win(self):
