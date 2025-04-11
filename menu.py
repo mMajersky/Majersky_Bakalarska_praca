@@ -3,7 +3,7 @@ import sys, os
 from sokoban import Sokoban_Game
 from prototype import Prototype_Game
 from platformer import Platformer_Game
-from lvls.sokoban.skoban_lvl import maps
+from lvls.sokoban.sokoban_lvl import maps
 from scripts.level_state import load_level_state, is_level_unlocked, reset_progress
 from scripts.utils import resource_path, get_levels
 
@@ -113,7 +113,7 @@ def start_game(mode, level_id, level_num):
     elif mode == "Prototype":
         Prototype_Game(level_index=level_num - 1).run()
 
-    # Po návrate z hry znova obnovíme menu
+    # Po návrate z hry znova obnoví menu
     pygame.init()
     screen = pygame.display.set_mode((1200, 800))
     pygame.display.set_caption("Main Menu")

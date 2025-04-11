@@ -17,7 +17,7 @@ class Sokoban_Game:
         self.mode = 'Sokoban'
         self.level_index = level_index
 
-        from lvls.sokoban.skoban_lvl import maps  # Načítanie dostupných levelov
+        from lvls.sokoban.sokoban_lvl import maps  # Načítanie dostupných levelov
         self.levels = [attr for attr in dir(maps()) if attr.startswith("lvl")]
         self.levels.sort()  # Usporiadanie levelov podľa názvu
 

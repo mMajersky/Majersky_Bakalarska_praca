@@ -19,6 +19,10 @@
         "Level 5": {
             "completed": false,
             "file": null
+        },
+        "Level 6": {
+            "completed": false,
+            "file": null
         }
     },
     "Platformer": {
@@ -33,24 +37,32 @@
         "Level 3": {
             "completed": false,
             "file": "Pmap_3.json"
+        },
+        "Level 4": {
+            "completed": false,
+            "file": "Pmap_4.json"
+        },
+        "Level 5": {
+            "completed": false,
+            "file": "Pmap_5.json"
         }
     },
     "Prototype": {
         "Level 1": {
             "completed": false,
-            "file": "NewMap_prototype.json"
+            "file": "ProtoMap_1.json"
         },
         "Level 2": {
             "completed": false,
-            "file": "ProtoMap_1.json"
+            "file": "ProtoMap_2.json"
         },
         "Level 3": {
             "completed": false,
-            "file": "ProtoMap_2.json"
+            "file": "ProtoMap_3.json"
         },
         "Level 4": {
             "completed": false,
-            "file": "ProtoMap_3.json"
+            "file": "ProtoMap_4.json"
         }
     }
 }
