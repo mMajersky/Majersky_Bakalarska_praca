@@ -1,47 +1,68 @@
 {
     "Sokoban": {
         "Level 1": {
-            "completed": true
+            "completed": false,
+            "file": null
         },
         "Level 2": {
-            "completed": false
+            "completed": false,
+            "file": null
         },
         "Level 3": {
-            "completed": false
+            "completed": false,
+            "file": null
         },
         "Level 4": {
-            "completed": false
+            "completed": false,
+            "file": null
         },
         "Level 5": {
-            "completed": false
+            "completed": false,
+            "file": null
+        },
+        "Level 6": {
+            "completed": false,
+            "file": null
         }
     },
     "Platformer": {
         "Level 1": {
-            "completed": true,
+            "completed": false,
             "file": "Pmap_1.json"
         },
         "Level 2": {
-            "completed": true,
+            "completed": false,
             "file": "Pmap_2.json"
         },
         "Level 3": {
-            "completed": true,
+            "completed": false,
             "file": "Pmap_3.json"
+        },
+        "Level 4": {
+            "completed": false,
+            "file": "Pmap_4.json"
+        },
+        "Level 5": {
+            "completed": false,
+            "file": "Pmap_5.json"
         }
     },
     "Prototype": {
         "Level 1": {
-            "completed": true,
-            "file": "NewMap_prototype.json"
+            "completed": false,
+            "file": "ProtoMap_1.json"
         },
         "Level 2": {
-            "completed": true,
-            "file": "ProtoMap_1.json"
+            "completed": false,
+            "file": "ProtoMap_2.json"
         },
         "Level 3": {
             "completed": false,
             "file": "ProtoMap_3.json"
+        },
+        "Level 4": {
+            "completed": false,
+            "file": "ProtoMap_4.json"
         }
     }
 }

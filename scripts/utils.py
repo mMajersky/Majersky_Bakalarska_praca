@@ -54,7 +54,7 @@ def fade_transition(screen, clock, duration=2500, steps=30, color=(0, 0, 0), sho
 
 
 def get_levels():
-    from lvls.sokoban.skoban_lvl import maps  # importuj lokálne, aby sa zabránil cyklus
+    from lvls.sokoban.sokoban_lvl import maps  # importuj lokálne, aby sa zabránil cyklus
     def safe_listdir(folder):
         try:
             return sorted([f for f in os.listdir(resource_path(folder)) if f.endswith(".json")])

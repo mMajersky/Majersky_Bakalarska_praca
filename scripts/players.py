@@ -12,14 +12,15 @@ class SokobanPlayer:
         self.moving = False
 
         self.image = image
-        self.x = col * 25 + 100
-        self.y = row * 25 + 100
+        self.x = col * 25 + game.offset_x
+        self.y = row * 25 + game.offset_y
+
 
     # Plynulý pohyb smerom k cieľovej pozícii
     def update(self):
         if self.moving:
-            target_x = self.target_col * 25 + 100
-            target_y = self.target_row * 25 + 100
+            target_x = self.target_col * 25 + self.game.offset_x
+            target_y = self.target_row * 25 + self.game.offset_y
             self.x += (target_x - self.x) * 0.2
             self.y += (target_y - self.y) * 0.2
             if abs(self.x - target_x) < 1 and abs(self.y - target_y) < 1:

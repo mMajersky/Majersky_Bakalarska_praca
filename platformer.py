@@ -197,3 +197,4 @@ class Platformer_Game:
 if __name__ == "__main__":
     game = Platformer_Game()
     game.run()
+    

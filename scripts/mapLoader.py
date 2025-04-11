@@ -2,7 +2,7 @@ import pygame
 import json
 import pymunk
 from scripts.entities import *
-from lvls.sokoban.skoban_lvl import maps
+from lvls.sokoban.sokoban_lvl import maps
 from scripts.utils import resource_path
 
 
