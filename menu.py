@@ -3,7 +3,6 @@ import sys, os
 from sokoban import Sokoban_Game
 from prototype import Prototype_Game
 from platformer import Platformer_Game
-from lvls.sokoban.sokoban_lvl import maps
 from scripts.level_state import load_level_state, is_level_unlocked, reset_progress
 from scripts.utils import resource_path, get_levels
 

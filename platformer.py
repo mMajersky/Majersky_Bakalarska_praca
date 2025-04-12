@@ -38,7 +38,8 @@ class Platformer_Game:
 
         # Načítanie tilemap and objects
         self.tilemap = PlatformerMapLoader(self)
-        self.tilemap.load(f"platformer/{self.level_id}")
+        self.tilemap.load(f"lvls/platformer/{self.level_id}")
+
 
         # Načítanie hráčov zo súboru – ak chýbajú, vytvoria sa na pozícii (0, 0)
         p1_data = self.tilemap.objects.get("P1")

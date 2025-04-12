@@ -54,15 +54,21 @@ class Editor:
 
         # Pokus o načítanie existujúcej mapy, ak neexistuje, pokračuj bez chyby
         try:
-            self.tilemap.load(mode.lower() + "/" + level_path)
+            path = os.path.join("lvls", mode.lower(), level_path)
+            self.tilemap.load(path)
+
         except FileNotFoundError:
             print(f"🟠 New map: {level_path}")
 
     # Uloženie mapy do súboru
     def savemap(self):
-        path = resource_path(f"lvls/{self.mode.lower()}/{self.level_path}")
+        folder = os.path.join(os.getcwd(), "lvls", self.mode.lower())
+        os.makedirs(folder, exist_ok=True)
+        path = os.path.join(folder, self.level_path)
         self.tilemap.save(path)
         print(f"💾 Saved map to {path}")
+
+
     
     def get_level_index(self):
         levels = sorted([f for f in os.listdir(f"lvls/{self.mode.lower()}") if f.endswith(".json")])

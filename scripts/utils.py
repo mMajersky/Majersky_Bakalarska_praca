@@ -1,5 +1,5 @@
 import pygame
-import os, sys
+import os, sys, json
 from scripts.ui import LevelCompleteMessage
 
 # Základná cesta ku všetkým obrázkom
@@ -54,16 +54,28 @@ def fade_transition(screen, clock, duration=2500, steps=30, color=(0, 0, 0), sho
 
 
 def get_levels():
-    from lvls.sokoban.sokoban_lvl import maps  # importuj lokálne, aby sa zabránil cyklus
     def safe_listdir(folder):
         try:
-            return sorted([f for f in os.listdir(resource_path(folder)) if f.endswith(".json")])
+            folder_path = os.path.join(os.getcwd(), folder)
+            return sorted([f for f in os.listdir(folder_path) if f.endswith(".json")])
         except FileNotFoundError:
             print(f"⚠️ Warning: Folder {folder} not found.")
             return []
 
+    # Nové: pre Sokoban z JSON-u
+    sokoban_path = os.path.join(os.getcwd(), "lvls", "sokoban", "sokoban_levels.json")
+    try:
+        with open(sokoban_path, "r") as f:
+            data = json.load(f)
+            sokoban_levels = [f"lvl{i+1}" for i in range(len(data["levels"]))]
+    except Exception as e:
+        print("Sokoban JSON load error:", e)
+        sokoban_levels = []
+
     return {
-        "Sokoban": [attr for attr in dir(maps()) if attr.startswith("lvl")],
+        "Sokoban": sokoban_levels,
         "Platformer": safe_listdir("lvls/platformer"),
         "Prototype": safe_listdir("lvls/prototype")
     }
+
+
