@@ -2,7 +2,6 @@ import pygame
 import sys
 import os
 from editor import Editor
-
 # Inicializácia Pygame a nastavenie okna editora
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -18,9 +17,13 @@ BG_COLOR = (30, 30, 30)
 # Načítanie všetkých dostupných máp pre editovanie
 def get_editor_levels():
     return {
-        "Platformer": sorted([f for f in os.listdir("lvls/platformer") if f.endswith(".json")]),
-        "Prototype": sorted([f for f in os.listdir("lvls/prototype") if f.endswith(".json")]),
+        "Platformer": sorted([f for f in os.listdir(os.path.join(os.getcwd(), "lvls", "platformer")) if f.endswith(".json")]),
+        "Prototype": sorted([f for f in os.listdir(os.path.join(os.getcwd(), "lvls", "prototype")) if f.endswith(".json")]),
     }
+
+
+
+
 
 # Trieda reprezentujúca tlačidlo v menu
 class Button:

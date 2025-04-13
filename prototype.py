@@ -44,7 +44,7 @@ class Prototype_Game:
 
         # Načítanie mapy a vytvorenie kolízií a objektov podľa mapy
         self.tilemap = PrototypeMapLoader(self)
-        self.tilemap.load(f"prototype/{self.level_id}")
+        self.tilemap.load(f"lvls/prototype/{self.level_id}")
         self.dynamic_objects = []
         self.tilemap.create_static_collision(self.space)
         self.tilemap.create_dynamic_objects()
@@ -55,7 +55,7 @@ class Prototype_Game:
             'up': pygame.K_w, 'down': pygame.K_s, 'left': pygame.K_a, 'right': pygame.K_d
         }, rotate=True)
 
-        self.player2 = PrototypePlayer(self, 600, 400, "blue", {
+        self.player2 = PrototypePlayer(self, 600, 400, "green", {
             'up': pygame.K_UP, 'down': pygame.K_DOWN, 'left': pygame.K_LEFT, 'right': pygame.K_RIGHT
         }, rotate=False)
 
@@ -107,22 +107,17 @@ class Prototype_Game:
         next_index = self.level_index + 1
         if next_index < len(self.levels):
             fade_transition(self.screen, self.clock, show_level_complete_message=True)
-
-            # Spusti ďalší level
-            Prototype_Game(level_index=next_index).run()
-
-            # Ukonči aktuálny loop
-            self.running = False
+            self.next_level = next_index  # ← toto je dôležité
         else:
             print("🎉 All prototype levels complete!")
-            self.running = False
+        self.running = False
+
 
 
     # Reštart aktuálneho levelu
     def restart_level(self):
         print("Restarting level...")
-        new_game = Prototype_Game(level_index=self.level_index)
-        new_game.run()
+        self.restart = True
         self.running = False
     # Hlavný herný cyklus
     def run(self):
@@ -141,7 +136,7 @@ class Prototype_Game:
             self.handle_input()
             self.space.step(1 / 60)  # Aktualizácia fyziky
 
-            self.display.fill((50, 150, 50))  # Pozadie
+            self.display.fill((50, 50, 150))  # Pozadie
             self.tilemap.render(self.display)
 
             # Vykreslenie finish polí
@@ -168,6 +163,14 @@ class Prototype_Game:
             self.hud.render(self.screen)
             pygame.display.update()
             self.clock.tick(60)
+
+        if hasattr(self, "next_level"):
+            Prototype_Game(level_index=self.next_level).run()
+        elif hasattr(self, "restart"):
+            Prototype_Game(level_index=self.level_index).run()
+
+
+
 
 # Spustenie hry
 if __name__ == "__main__":

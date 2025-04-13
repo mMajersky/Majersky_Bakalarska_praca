@@ -30,7 +30,7 @@ pyinstaller --onefile --noconsole ^
 
 
 :: Build editor_menu.py
-pyinstaller --onefile --noconsole ^
+pyinstaller --onefile  ^
   --add-data "assets;assets" ^
   --add-data "lvls;lvls" ^
   --add-data "scripts;scripts" ^

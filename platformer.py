@@ -9,11 +9,11 @@ from scripts.level_state import mark_level_completed
 
 
 class Platformer_Game:
-    def __init__(self,level_index=0):
+    def __init__(self,screen,level_index=0):
         # Inicializácia hry (obrazovka, assets, načítanie levelu, hráči, objekty, HUD)
         pygame.init()
         pygame.display.set_caption("Platformer")
-        self.screen = pygame.display.set_mode((1200, 800)) 
+        self.screen = screen
         self.display = pygame.Surface((600, 400))
         self.clock = pygame.Clock()
         self.render_scale = 2
@@ -21,7 +21,6 @@ class Platformer_Game:
         self.levels = sorted([f for f in os.listdir("lvls/platformer") if f.endswith(".json")])
         self.level_id = self.levels[level_index]
         self.level_label = f"Level {level_index + 1}"
-        pygame.display.set_mode((1200, 800), flags=pygame.SCALED, vsync=1)
         self.running = True
 
 
@@ -38,7 +37,8 @@ class Platformer_Game:
 
         # Načítanie tilemap and objects
         self.tilemap = PlatformerMapLoader(self)
-        self.tilemap.load(f"platformer/{self.level_id}")
+        self.tilemap.load(f"lvls/platformer/{self.level_id}")
+
 
         # Načítanie hráčov zo súboru – ak chýbajú, vytvoria sa na pozícii (0, 0)
         p1_data = self.tilemap.objects.get("P1")
@@ -86,21 +86,19 @@ class Platformer_Game:
     # Reštart aktuálneho levelu – spustí znova rovnakú úroveň
     def restart_level(self):
         print("Restarting level...")
-        new_game = Platformer_Game(level_index=self.level_index)
-        new_game.run()
+        print("Restarting level...")
+        self.restart = True
         self.running = False
 
     # Načíta ďalší level, ak existuje, inak ukončí hru
     def load_next_level(self):
         next_index = self.level_index + 1
+        self.running = False
         if next_index < len(self.levels):
             fade_transition(self.screen, self.clock, show_level_complete_message=True)
-
-            # Spusti ďalší level
-            Platformer_Game(level_index=next_index).run()
+            self.next_level = next_index  # ← TOTO tu chýbalo
 
             # Ukonči aktuálny loop
-            self.running = False
         else:
             print("🎉 All platformer levels complete!")
             self.running = False
@@ -174,13 +172,20 @@ class Platformer_Game:
             self.hud.render(self.screen)
             pygame.display.update()
             self.clock.tick(60)
-            print("FPS:", self.clock.get_fps())
+
+        if hasattr(self, "next_level"):
+            Platformer_Game(self.screen,level_index=self.next_level).run()
+        elif hasattr(self, "restart"):
+            Platformer_Game(self.screen,level_index=self.level_index).run()
+
+
 
     # Spracovanie používateľských vstupov (skok, reštart, návrat do menu)
     def handle_events(self):
-        """Handles user input (quit event, jumping)."""
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.running = False
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:

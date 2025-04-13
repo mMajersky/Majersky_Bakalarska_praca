@@ -1,8 +1,8 @@
 import pygame
 import json
 import pymunk
+import os
 from scripts.entities import *
-from lvls.sokoban.sokoban_lvl import maps
 from scripts.utils import resource_path
 
 
@@ -12,12 +12,13 @@ class SokobanMapLoader:
         self.level_map = []
         self.target_cords = []
 
-    # Načítanie konkrétnej úrovne zo súboru maps()
-    def load(self, level_name):
-        self.level_map = getattr(maps(), level_name)
+    def load(self, level_index):
+        path = os.path.join(os.getcwd(), "lvls", "sokoban", "sokoban_levels.json")
+        with open(path, "r") as f:
+            data = json.load(f)
+        self.level_map = data["levels"][level_index]
         self.find_targets()
 
-    # Vyhľadanie cieľových pozícií (bodky)
     def find_targets(self):
         self.target_cords = []
         for row_idx, row in enumerate(self.level_map):
@@ -30,6 +31,7 @@ class SokobanMapLoader:
 
     def get_target(self):
         return self.target_cords
+
 
 
 # ─────────────── SPOLOČNÉ PRE PLATFORMER A PROTOTYPE ─────────────── #
@@ -115,23 +117,21 @@ class PlatformerMapLoader(BaseMapLoader):
 
     # Načítanie mapy a inicializácia dverí a tlačidiel
     def load(self, path):
-        with open(resource_path('lvls/' + path), 'r') as f:
+        full_path = os.path.join(os.getcwd(), path)
+        with open(full_path, "r") as f:
             map_data = json.load(f)
         self.load_common(map_data)
-
-        self.doors = []
-        self.buttons = []
-
-        for door in self.objects.get('doors', []):
-            self.doors.append(Door(door['x'], door['y'], self.tile_size, tuple(door['color'])))
-
-        for button in self.objects.get('buttons', []):
-            self.buttons.append(Button(button['x'], button['y'], self.tile_size, tuple(button['color'])))
+        self.doors = [Door(d['x'], d['y'], self.tile_size, tuple(d['color']))
+                      for d in self.objects.get('doors', [])]
+        self.buttons = [Button(b['x'], b['y'], self.tile_size, tuple(b['color']))
+                        for b in self.objects.get('buttons', [])]
 
     # Uloženie mapy do JSON súboru
     def save(self, path):
-        with open(resource_path(path), 'w') as f:
-            json.dump(self.save_common(), f)
+        full_path = os.path.join(os.getcwd(), "lvls", path)
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        with open(full_path, "w") as f:
+            json.dump(self.save_common(), f, indent=4)
 
     # Vykreslenie mapy vrátane objektov
     def render(self, surf):
@@ -177,22 +177,26 @@ class PrototypeMapLoader(PlatformerMapLoader):
 
     # Načítanie dát z JSON vrátane physics_objects
     def load(self, path):
-        with open(resource_path('lvls/' + path), 'r') as f:
+        full_path = os.path.join(os.getcwd(), path)
+        with open(full_path, "r") as f:
             map_data = json.load(f)
         self.physics_objects = map_data.get('physics_objects', [])
         self.load_common(map_data)
 
     # Uloženie mapy + physics_objects do súboru
+
     def save(self, path):
         for key in ["buttons", "doors", "finish", "P1", "P2"]:
             if key not in self.objects:
                 self.objects[key] = [] if key in ["buttons", "doors", "finish"] else {}
 
-        with open(resource_path(path), 'w') as f:
+        full_path = os.path.join(os.getcwd(), "lvls", path)
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        with open(full_path, "w") as f:
             json.dump({
                 **self.save_common(),
                 'physics_objects': [tile for tile in self.tilemap.values() if tile['type'] in PHYSICS_OBJECTS]
-            }, f)
+            }, f, indent=4)
 
     # Vytvorenie pevných kolíznych objektov (dynamické dlaždice typu grass/stone)
     def create_static_collision(self, space):
