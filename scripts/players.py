@@ -85,6 +85,7 @@ class PlatformerPlayer:
         self.air_time = 0
         self.grounded = True
         self.color = color
+        self.facing_right = True
 
     # Návrat rektanglu hráča pre kolízie
     def rect(self):
@@ -96,6 +97,10 @@ class PlatformerPlayer:
         frame_movement = (movement[0] + self.velocity[0], movement[1] + self.velocity[1])
         
         # Horizontálny pohyb a kolízie
+        if movement[0] > 0:
+            self.facing_right = True
+        elif movement[0] < 0:
+            self.facing_right = False
         self.pos[0] += frame_movement[0]
         entity_rect = self.rect()
         for rect in tilemap.physics_rects_around(self.pos) + [d.rect for d in self.game.doors if not d.opened]:
@@ -158,11 +163,18 @@ class PlatformerPlayer:
     # Vykreslenie hráča
     def render(self, surf):
         if self.color == 'red':
-            surf.blit(self.game.assets['player1'], (int(self.pos[0]), int(self.pos[1])))
+            sprite = self.game.assets['player1']
         elif self.color == 'green':
-            surf.blit(self.game.assets['player2'], (int(self.pos[0]), int(self.pos[1])))
+            sprite = self.game.assets['player2']
         else:
-            surf.blit(self.game.assets['player2'], (int(self.pos[0]), int(self.pos[1])))
+            sprite = self.game.assets['player2']
+
+        # Otočenie sprite podľa smeru
+        if not self.facing_right:
+            sprite = pygame.transform.flip(sprite, True, False)
+
+        surf.blit(sprite, (int(self.pos[0]), int(self.pos[1])))
+
 
 
     # Skok hráča (len ak je na zemi)

@@ -8,7 +8,7 @@ from scripts.utils import resource_path, get_levels
 
 # Inicializácia Pygame
 pygame.init()
-screen = pygame.display.set_mode((1200, 800))
+screen = pygame.display.set_mode((1200, 800), vsync=1)
 pygame.display.set_caption("Main Menu")
 font = pygame.font.Font(None, 36)
 clock = pygame.time.Clock()
@@ -105,16 +105,16 @@ def go_back():
 
 # Spustenie hry
 def start_game(mode, level_id, level_num):
+    global screen
     if mode == "Sokoban":
         Sokoban_Game(level_index=level_num - 1).run()
     elif mode == "Platformer":
-        Platformer_Game(level_index=level_num - 1).run()
+        Platformer_Game(screen,level_index=level_num - 1).run()
     elif mode == "Prototype":
         Prototype_Game(level_index=level_num - 1).run()
 
     # Po návrate z hry znova obnoví menu
     pygame.init()
-    screen = pygame.display.set_mode((1200, 800))
     pygame.display.set_caption("Main Menu")
     build_mode_buttons() if current_state == "mode" else build_level_buttons(mode)
 

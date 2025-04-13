@@ -107,22 +107,17 @@ class Prototype_Game:
         next_index = self.level_index + 1
         if next_index < len(self.levels):
             fade_transition(self.screen, self.clock, show_level_complete_message=True)
-
-            # Spusti ďalší level
-            Prototype_Game(level_index=next_index).run()
-
-            # Ukonči aktuálny loop
-            self.running = False
+            self.next_level = next_index  # ← toto je dôležité
         else:
             print("🎉 All prototype levels complete!")
-            self.running = False
+        self.running = False
+
 
 
     # Reštart aktuálneho levelu
     def restart_level(self):
         print("Restarting level...")
-        new_game = Prototype_Game(level_index=self.level_index)
-        new_game.run()
+        self.restart = True
         self.running = False
     # Hlavný herný cyklus
     def run(self):
@@ -168,6 +163,14 @@ class Prototype_Game:
             self.hud.render(self.screen)
             pygame.display.update()
             self.clock.tick(60)
+
+        if hasattr(self, "next_level"):
+            Prototype_Game(level_index=self.next_level).run()
+        elif hasattr(self, "restart"):
+            Prototype_Game(level_index=self.level_index).run()
+
+
+
 
 # Spustenie hry
 if __name__ == "__main__":

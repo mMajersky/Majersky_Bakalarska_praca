@@ -227,12 +227,14 @@ class Editor:
                 elif event.key == pygame.K_p:
                     print("▶️ Launching level...")
                     pygame.quit()
+                    pygame.init()
+                    screen = pygame.display.set_mode((1200, 800), vsync=1)
                     if self.mode == "Prototype":
                         from prototype import Prototype_Game
                         Prototype_Game(level_index=self.get_level_index()).run()
                     elif self.mode == "Platformer":
                         from platformer import Platformer_Game
-                        Platformer_Game(level_index=self.get_level_index()).run()
+                        Platformer_Game(screen,level_index=self.get_level_index()).run()
                     sys.exit()
 
 
