@@ -2,6 +2,8 @@
 
 Tento projekt je vytvorený ako súčasť bakalárskej práce a pozostáva z troch hier pre dvoch hráčov na jednej klávesnici. Aplikácia je inšpirovaná sériou Fireboy and Watergirl a hrou Sokoban, kladie dôraz na spoluprácu a logické myslenie.
 
+Najnovšia verzia softvéru je dostupná ako .zip archív v sekcii Releases na GitHub repozitári – aktuálna verzia: pygamegame 5.0.
+
 ## Spustenie
 
 1. Rozbaľte celý obsah ZIP archívu do jednej zložky (napr. `PygameHra`).
@@ -53,6 +55,10 @@ Tento projekt je vytvorený ako súčasť bakalárskej práce a pozostáva z tro
 - Prepnutie medzi mriežkou a voľným umiestňovaním: G
 - Spustenie Editovaného levelu: P
 
+ Poznámka:
+Ak sa vytvorí nová úroveň, je nutné ju manuálne premenovať vo lvls/''hra''/''new_map_hra'', pokiaľ chcete vytvoriť ďalšiu novú úroveň. V opačnom prípade editor pri spustení otvorí posledný vytvorený súbor.
+
+Sokoban úrovne nie je možné editovať vizuálne. Nachádzajú sa v súbore lvls/sokoban/skoban_lvl.py a je potrebné ich upraviť ručne ako maticu znakov v zdrojovom kóde.
 
 Vyvinuté ako súčasť bakalárskej práce 
 Autor Miroslav Majerský
